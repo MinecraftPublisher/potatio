@@ -6,37 +6,9 @@ using System.Text;
 
 namespace potatio
 {
-    class Potatio
-    {
-        private Lexer lexer;
-        private Transpiler transpiler;
-        public readonly string version = "v0.1 BETA";
-
-        public Potatio()
-        {
-            Console.WriteLine("Potatio " + version);
-            Console.WriteLine("Loading interpreter...");
-            lexer = new Lexer();
-            Console.WriteLine("Loading transpiler...");
-            transpiler = new Transpiler();
-            Console.WriteLine("All assemblies loaded.");
-            Console.WriteLine("");
-        }
-
-        public void RunCode(string code)
-        {
-            Console.WriteLine("Ran code!");
-        }
-    }
-
     class Lexer
     {
-        public Lexer()
-        {
-
-        }
-
-        public LexedOutput Lex(string code)
+        public static LexedOutput Lex(string code)
         {
             LexedOutput output = new LexedOutput();
 
@@ -52,6 +24,10 @@ namespace potatio
         }
     }
 
+    /// <summary>
+    /// Once again, a picked up class.
+    /// </summary>
+    /// <typeparam name="TType"></typeparam>
     public static class JSON<TType> where TType : class
     {
         /// <summary>
@@ -70,7 +46,7 @@ namespace potatio
         /// <summary>
         /// DeSerializes an object from JSON
         /// </summary>
-        public static TType DeSerialize(string json)
+        public static TType Deserialize(string json)
         {
             using (var stream = new MemoryStream(Encoding.Default.GetBytes(json)))
             {
