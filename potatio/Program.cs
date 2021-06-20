@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace potatio
@@ -27,19 +28,35 @@ namespace potatio
             {
                 Console.WriteLine("Reading input...");
                 string inputDir = args[0];
-                
-                if(GetEncoding(inputDir) == null)
+                FileInfo inputDirInfo = new FileInfo(inputDir);
+                string outputFile = Path.Combine(inputDirInfo.DirectoryName, inputDirInfo.Name.Substring(0, inputDirInfo.Name.IndexOf(inputDirInfo.Extension)));
+
+                if (HasBinaryContent(inputDir) == true)
                 {
-                    Console.WriteLine("Given input is not in a vaild text encoding format.");
-                    Environment.Exit(87);
+                    Console.WriteLine("Given input contains binary.");
+                    File.WriteAllText(outputFile + ".error.txt", "Given input contains binary.");
                 }
                 else
                 {
                     Console.WriteLine("Loading data into memory...");
-                    string input = File.ReadAllText(inputDir);
+                    string input = File.ReadAllText(inputDirInfo.FullName);
                     Console.WriteLine("Lexing input...");
                     LexedOutput output = Lexer.Lex(input);
-                    string outputString = JSON<LexedOutput>.Serialize(output);
+                    Console.WriteLine("Finished lexing.");
+                    if(output.errors > 0)
+                    {
+                        Console.WriteLine("Lexer errors:\n");
+                        Console.WriteLine(output.errorList);
+                        File.WriteAllText(outputFile + ".error.txt",output.errorList);
+                    }
+                    else
+                    {
+                        string outputString = JSON.Serialize(output);
+                        File.WriteAllText(outputFile + ".output.txt", outputString);
+                        Console.WriteLine("Wrote the lexed data to the output file.");
+                    }
+                    Console.WriteLine("Press enter to exit");
+                    Console.ReadLine();
                 }
             }
             else
@@ -59,33 +76,13 @@ namespace potatio
         }
 
         /// <summary>
-        /// Determines a text file's encoding by analyzing its byte order mark (BOM).
-        /// Defaults to ASCII when detection of the text file's endianness fails.
-        /// 
-        /// ( Btw i picked up this code from idk where i think the good ol' stackoverflow )
+        /// This one checks for binary content, pretty cool if you ask me.
         /// </summary>
-        /// <param name="filename">The text file to analyze.</param>
-        /// <returns>The detected encoding.</returns>
-        public static Encoding GetEncoding(string filename)
+        /// <param name="path">The input path.</param>
+        /// <returns>True if the file has binary, False if the file contains only text.</returns>
+        public static bool HasBinaryContent(string path)
         {
-            // Read the BOM
-            var bom = new byte[4];
-            using (var file = new FileStream(filename, FileMode.Open, FileAccess.Read))
-            {
-                file.Read(bom, 0, 4);
-            }
-
-            // Analyze the BOM
-            if (bom[0] == 0x2b && bom[1] == 0x2f && bom[2] == 0x76) return Encoding.UTF7;
-            if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf) return Encoding.UTF8;
-            if (bom[0] == 0xff && bom[1] == 0xfe && bom[2] == 0 && bom[3] == 0) return Encoding.UTF32; //UTF-32LE
-            if (bom[0] == 0xff && bom[1] == 0xfe) return Encoding.Unicode; //UTF-16LE
-            if (bom[0] == 0xfe && bom[1] == 0xff) return Encoding.BigEndianUnicode; //UTF-16BE
-            if (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff) return new UTF32Encoding(true, true);  //UTF-32BE
-
-            // We actually have no idea what the encoding is if we reach this point, so
-            // you may wish to return null instead of defaulting to ASCII
-            return null;
+            return File.ReadAllText(path).Any(ch => char.IsControl(ch) && ch != '\r' && ch != '\n');
         }
     }
 

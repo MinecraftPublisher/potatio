@@ -1,0 +1,2 @@
+C:\Users\mforo\source\repos\potatio\potatio\bin\Release\netcoreapp3.1\win-x64\publish\potatio.pdb
+C:\Users\mforo\source\repos\potatio\potatio\bin\Release\netcoreapp3.1\win-x64\publish\potatio.exe

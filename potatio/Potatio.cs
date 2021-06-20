@@ -10,7 +10,8 @@ namespace potatio
     {
         public static LexedOutput Lex(string code)
         {
-            LexedOutput output = new LexedOutput();
+            LexedOutput output = new LexedOutput("");
+            output.pieces.Append(new CodePiece());
 
             return output;
         }
@@ -27,31 +28,32 @@ namespace potatio
     /// <summary>
     /// Once again, a picked up class.
     /// </summary>
-    /// <typeparam name="TType"></typeparam>
-    public static class JSON<TType> where TType : class
+    public static class JSON
     {
         /// <summary>
-        /// Serializes an object to JSON
+        /// Deserialize an from json string
         /// </summary>
-        public static string Serialize(TType instance)
+        public static T Deserialize<T>(string body)
         {
-            var serializer = new DataContractJsonSerializer(typeof(TType));
             using (var stream = new MemoryStream())
+            using (var writer = new StreamWriter(stream))
             {
-                serializer.WriteObject(stream, instance);
-                return Encoding.Default.GetString(stream.ToArray());
+                writer.Write(body);
+                writer.Flush();
+                stream.Position = 0;
+                return (T)new DataContractJsonSerializer(typeof(T)).ReadObject(stream);
             }
         }
 
         /// <summary>
-        /// DeSerializes an object from JSON
+        /// Serialize an object to json
         /// </summary>
-        public static TType Deserialize(string json)
+        public static string Serialize<T>(T item)
         {
-            using (var stream = new MemoryStream(Encoding.Default.GetBytes(json)))
+            using (MemoryStream ms = new MemoryStream())
             {
-                var serializer = new DataContractJsonSerializer(typeof(TType));
-                return serializer.ReadObject(stream) as TType;
+                new DataContractJsonSerializer(typeof(T)).WriteObject(ms, item);
+                return Encoding.Default.GetString(ms.ToArray());
             }
         }
     }

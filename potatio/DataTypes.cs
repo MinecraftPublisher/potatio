@@ -4,19 +4,39 @@ using System.Text;
 
 namespace potatio
 {
-    class LexedOutput
+    [Serializable]
+    struct LexedOutput
     {
         public int errors;
         public string errorList;
         public string[] arguments;
         public CodePiece[] pieces;
 
+        /// <summary>
+        /// Creates a lexed output with the given parameters.
+        /// </summary>
+        /// <param name="errors"></param>
+        /// <param name="errorList"></param>
+        /// <param name="arguments"></param>
+        /// <param name="pieces"></param>
         public LexedOutput(int errors, string errorList, string[] arguments, CodePiece[] pieces)
         {
             this.errors = errors;
             this.errorList = errorList;
             this.arguments = arguments;
             this.pieces = pieces;
+        }
+
+        /// <summary>
+        /// Creates a new empty LexedOutput.
+        /// </summary>
+        /// <param name="init"></param>
+        public LexedOutput(string init = "empty")
+        {
+            this.errors = 0;
+            this.errorList = "";
+            this.arguments = new string[0];
+            this.pieces = new CodePiece[0];
         }
     }
 
