@@ -19,3 +19,5 @@ Double-Click it!
 ## Linux/MacOS guide
 
 You can use [This URL](https://www.c-sharpcorner.com/article/how-to-deploy-net-core-application-on-linux/) to learn more about running potatio on Linux/MacOS.
+
+Quick note: You need to use the .DLL file provided in the folder to run potatio on linux/macos.
