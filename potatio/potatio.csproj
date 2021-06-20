@@ -6,4 +6,9 @@
 		<ApplicationIcon>potato.ico</ApplicationIcon>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+	  <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+	</PropertyGroup>
+
 </Project>

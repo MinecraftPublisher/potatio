@@ -9,10 +9,15 @@ namespace potatio
     {
         static void Main(string[] args)
         {
+
+            string version = "v0.1 BETA";
+            Console.Title = "Potatio " + version;
+            Console.Clear();
+
             #region potatio-logo
             Console.WriteLine(
  "\n" +
- "      ######                      \n" +                
+ "      ######                      \n" +
  "      #     #  ####  #####   ##   ##### #  ####  \n" +
  "      #     # #    #   #    #  #    #   # #    # \n" +
  "      ######  #    #   #   #    #   #   # #    # \n" +
@@ -21,10 +26,7 @@ namespace potatio
  "      #        ####    #   #    #   #   #  ####  \n");
             #endregion
 
-            string version = "v0.1 BETA";
-            Console.Title = "Potatio " + version;
-
-            if(args.Length == 1)
+            if (args.Length == 1)
             {
                 Console.WriteLine("Reading input...");
                 string inputDir = args[0];
@@ -34,7 +36,9 @@ namespace potatio
                 if (HasBinaryContent(inputDir) == true)
                 {
                     Console.WriteLine("Given input contains binary.");
-                    File.WriteAllText(outputFile + ".error.txt", "Given input contains binary.");
+                    File.WriteAllText(outputFile + ".error.txt", "Given input contains binary.\n" +
+                        "Press enter to exit.");
+                    Console.ReadLine();
                 }
                 else
                 {
@@ -43,11 +47,11 @@ namespace potatio
                     Console.WriteLine("Lexing input...");
                     LexedOutput output = Lexer.Lex(input);
                     Console.WriteLine("Finished lexing.");
-                    if(output.errors > 0)
+                    if (output.errors > 0)
                     {
                         Console.WriteLine("Lexer errors:\n");
                         Console.WriteLine(output.errorList);
-                        File.WriteAllText(outputFile + ".error.txt",output.errorList);
+                        File.WriteAllText(outputFile + ".error.txt", output.errorList);
                     }
                     else
                     {
@@ -55,9 +59,11 @@ namespace potatio
                         File.WriteAllText(outputFile + ".output.txt", outputString);
                         Console.WriteLine("Wrote the lexed data to the output file.");
                     }
-                    Console.WriteLine("Press enter to exit");
+                    Console.WriteLine("Press enter to exit.");
                     Console.ReadLine();
                 }
+
+                Environment.Exit(0);
             }
             else
             {
@@ -66,12 +72,10 @@ namespace potatio
                     "The goal of potatio is to let people share their projects with everyone.\n" +
                     "Write one project in potatio, and convert it into a webpage, an ios app, an android app, a windows app, a linux app, a macos app and many more.\n" +
                     "\n" +
-                    "CONTRIBUTION GUIDE COMING SOON");
-            }
-
-            while(true)
-            {
-
+                    "CONTRIBUTION GUIDE COMING SOON\n\n" +
+                    "Press enter to exit.");
+                Console.ReadLine();
+                Environment.Exit(0);
             }
         }
 
@@ -83,29 +87,6 @@ namespace potatio
         public static bool HasBinaryContent(string path)
         {
             return File.ReadAllText(path).Any(ch => char.IsControl(ch) && ch != '\r' && ch != '\n');
-        }
-    }
-
-    /// <summary>
-    /// Got this class from https://www.techiedelight.com/add-new-elements-array-csharp/ to add elements to arrays.
-    /// </summary>
-    public static class Extensions
-    {
-        public static T[] Append<T>(this T[] array, T item)
-        {
-            if (array == null)
-            {
-                return new T[] { item };
-            }
-
-            T[] result = new T[array.Length + 1];
-            for (int i = 0; i < array.Length; i++)
-            {
-                result[i] = array[i];
-            }
-
-            result[array.Length] = item;
-            return result;
         }
     }
 }
