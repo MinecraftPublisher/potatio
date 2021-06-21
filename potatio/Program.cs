@@ -32,13 +32,22 @@ namespace potatio
                 string inputDir = args[0];
                 FileInfo inputDirInfo = new FileInfo(inputDir);
                 string outputFile = Path.Combine(inputDirInfo.DirectoryName, inputDirInfo.Name.Substring(0, inputDirInfo.Name.IndexOf(inputDirInfo.Extension)));
+                if(!File.Exists(inputDir))
+                {
+                    Console.WriteLine("Given input file does not exist.\n" +
+                        "Press enter to exit.");
+                    File.WriteAllText(outputFile + ".error.txt", "Given input file does not exist.");
+                    Console.ReadLine();
+                    Environment.Exit(88);
+                }
 
                 if (HasBinaryContent(inputDir) == true)
                 {
-                    Console.WriteLine("Given input contains binary.");
-                    File.WriteAllText(outputFile + ".error.txt", "Given input contains binary.\n" +
+                    Console.WriteLine("Given input contains binary.\n" +
                         "Press enter to exit.");
+                    File.WriteAllText(outputFile + ".error.txt", "Given input contains binary.");
                     Console.ReadLine();
+                    Environment.Exit(87);
                 }
                 else
                 {

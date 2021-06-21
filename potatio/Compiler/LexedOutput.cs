@@ -4,6 +4,7 @@ using System.Text;
 
 namespace potatio
 {
+    [Serializable]
     class LexedOutput
     {
         public int errors;

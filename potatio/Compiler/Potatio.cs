@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization.Json;
 using System.Text;
 
@@ -13,7 +14,38 @@ namespace potatio
         {
             LexedOutput output = new LexedOutput();
 
+            string[] lines = code.Split('\n');
+            int length = lines.Length;
+            int index = 0;
+
+            for(index = 0; index < length; index++)
+            {
+                string line = lines[index];
+                Type functionType = Assembly.GetExecutingAssembly().GetType("potatio.Methods");
+                object runtime = Activator.CreateInstance(functionType);
+                Methods.smth = "I read this from the current assembly!";
+                MethodInfo responder = functionType.GetMethod("test");
+                if(responder == null)
+                {
+                    Console.WriteLine("Error: undefined function test.");
+                }
+                else
+                {
+                    Console.WriteLine("Output: " + responder.Invoke(null, new string[] { "I read this from the input!" }));
+                }
+            }
+
             return output;
+        }
+    }
+
+    public class Methods
+    {
+        public static string smth;
+
+        public static string test(string input)
+        {
+            return "Hi! \"" + smth + "\" \"" + input + "\"";
         }
     }
 
