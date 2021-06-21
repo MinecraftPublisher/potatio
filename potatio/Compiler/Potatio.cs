@@ -19,6 +19,12 @@ namespace potatio
 
     public static class Extensions
     {
+        /// <summary>
+        /// Gets the specified string's line and character index from the current string.
+        /// </summary>
+        /// <param name="current">The current string.</param>
+        /// <param name="text">The text to get the index.</param>
+        /// <returns></returns>
         public static string GetLineIndex(this string current, string text)
         {
             foreach(string line in current.Split('\n'))

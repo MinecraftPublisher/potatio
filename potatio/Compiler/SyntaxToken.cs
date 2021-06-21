@@ -2,14 +2,22 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace potatio.Compiler
+namespace potatio
 {
 	[Serializable]
 	struct SyntaxToken
-	{
-		SyntaxTokenType type;
-	}
+    {
+		public SyntaxTokenType type;
+		public object data;
 
+		public SyntaxToken(SyntaxTokenType type, object data)
+        {
+			this.type = type;
+			this.data = data;
+        }
+    }
+
+	[Serializable]
 	enum SyntaxTokenType
 	{
 		/* Data types */
@@ -31,31 +39,30 @@ namespace potatio.Compiler
 		Space = 12,
 		Tab = 13,
 		NewLine = 14,
-		Semicolon = 15,
-		Quotation = 16,
-		DoubleQuotation = 17,
-		Plus = 18,
-		Minus = 19,
-		Multiple = 20,
-		Divide = 21,
-		Equals = 22,
-		Dot = 23,
-		Underline = 24,
-		Exclamation = 25,
-		Question = 26,
+		Quotation = 15,
+		DoubleQuotation = 16,
+		Plus = 17,
+		Minus = 18,
+		Multiple = 19,
+		Divide = 20,
+		Equals = 21,
+		Dot = 22,
+		Underline = 23,
+		Exclamation = 24,
+		Question = 25,
 
 		/* OpenA = "("   CloseA = ")" */
 
-	    OpenA = 27,
-		CloseA = 28,
+	    OpenA = 26,
+		CloseA = 27,
 
 		/* OpenB = "["   CloseB = "]" */
-		OpenB = 29,
-		CloseB = 30,
+		OpenB = 28,
+		CloseB = 29,
 
 		/* OpenC = "{"   CloseC = "}" */
 
-		OpenC = 31,
-		CloseC = 32
+		OpenC = 30,
+		CloseC = 31
 	}
 }

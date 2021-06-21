@@ -8,11 +8,13 @@ namespace potatio
     {
         public int errors;
         public string errorList;
+        public SyntaxToken[] tokens;
 
         public LexedOutput()
         {
-            errors = 0;
-            errorList = "";
+            this.errors = 0;
+            this.errorList = "";
+            this.tokens = new SyntaxToken[0];
         }
     }
 }
