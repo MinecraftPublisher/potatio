@@ -18,24 +18,67 @@ namespace potatio
             int length = lines.Length;
             int index = 0;
 
-            for(index = 0; index < length; index++)
+            for (index = 0; index < length; index++)
             {
                 string line = lines[index];
-                Type functionType = Assembly.GetExecutingAssembly().GetType("potatio.Methods");
-                object runtime = Activator.CreateInstance(functionType);
-                Methods.smth = "I read this from the current assembly!";
-                MethodInfo responder = functionType.GetMethod("test");
-                if(responder == null)
+                string functionName = line.ReadTo('(');
+
+                // Parsing area
+
+                if (functionName.Length == 0)
                 {
-                    Console.WriteLine("Error: undefined function test.");
+                    output.errors++;
+                    output.errorList += "Incorrect syntax on " + code.GetLineIndex(line);
                 }
                 else
                 {
-                    Console.WriteLine("Output: " + responder.Invoke(null, new string[] { "I read this from the input!" }));
+                    string arguments = line.ReadTo(')');
+                    
+                    if (arguments.Length == 0)
+                    {
+                        output.errors++;
+                        output.errorList += "Incorrect syntax on " + code.GetLineIndex(line);
+                    }
+                    else
+                    {
+                        // Here i need a gud data type to work with, and then i can write the parser.
+                    }
                 }
             }
 
             return output;
+        }
+
+        public static string executeFn(string name, string[] args)
+        {
+            Type functionType = Assembly.GetExecutingAssembly().GetType("potatio.Methods");
+            object runtime = Activator.CreateInstance(functionType);
+            MethodInfo responder = functionType.GetMethod(name);
+
+            if (responder == null)
+            {
+                return "null";
+            }
+            else
+            {
+                return (string)responder.Invoke(null, args);
+            }
+        }
+
+        public static string executeFn(string name)
+        {
+            Type functionType = Assembly.GetExecutingAssembly().GetType("potatio.Methods");
+            object runtime = Activator.CreateInstance(functionType);
+            MethodInfo responder = functionType.GetMethod(name);
+
+            if (responder == null)
+            {
+                return "null";
+            }
+            else
+            {
+                return (string)responder.Invoke(null, null);
+            }
         }
     }
 
@@ -59,15 +102,35 @@ namespace potatio
         /// <returns></returns>
         public static string GetLineIndex(this string current, string text)
         {
-            foreach(string line in current.Split('\n'))
+            foreach (string line in current.Split('\n'))
             {
-                if(line.IndexOf(text) > -1)
+                if (line.IndexOf(text) > -1)
                 {
                     return "Line " + current.Split('\n').ToList().IndexOf(line) + " Character " + line.IndexOf(text);
                 }
             }
 
             return "Line 0 Character 0";
+        }
+
+        /// <summary>
+        /// Reads until finding a specific character.
+        /// </summary>
+        /// <param name="current">The current string.</param>
+        /// <param name="character">The character to read to.</param>
+        /// <returns></returns>
+        public static string ReadTo(this string current, char character)
+        {
+            int i = 0;
+            string output = "";
+
+            while((current[i] != character) && ( i != current.Length - 1 ))
+            {
+                output += current[i];
+                i++;
+            }
+
+            return output;
         }
     }
 
