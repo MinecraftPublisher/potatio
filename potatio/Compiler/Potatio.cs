@@ -18,6 +18,9 @@ namespace potatio
             int length = lines.Length;
             int index = 0;
 
+            Tokenizer tokenizer = new Tokenizer();
+            File.WriteAllText("outputthing.txt", JSON.Serialize(tokenizer.Tokenize(code)));
+
             for (index = 0; index < length; index++)
             {
                 string line = lines[index];

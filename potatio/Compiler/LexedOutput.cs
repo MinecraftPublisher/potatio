@@ -10,17 +10,17 @@ namespace potatio
     {
         public int errors;
         public string errorList;
-        public SyntaxToken[] tokens;
-        public Dictionary<string, SyntaxToken[]> functions;
-        public Dictionary<string, string> variables;
+        public Token[] tokens;
+        public Dictionary<string, Token[]> functions;
+        public Dictionary<string, Token> variables;
 
         public LexedOutput()
         {
             this.errors = 0;
             this.errorList = "";
-            this.tokens = new SyntaxToken[0];
-            this.functions = new Dictionary<string, SyntaxToken[]>();
-            this.variables = new Dictionary<string, string>();
+            this.tokens = new Token[0];
+            this.functions = new Dictionary<string, Token[]>();
+            this.variables = new Dictionary<string, Token>();
         }
     }
 }
