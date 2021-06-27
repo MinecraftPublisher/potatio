@@ -1,0 +1,7 @@
+import("default")
+
+print("hello!")
+text = "hi!"
+
+// This is an example code for future potatio syntax.
+// And yes, it is very much like python because python is easy.

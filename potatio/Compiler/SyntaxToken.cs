@@ -12,7 +12,7 @@ namespace potatio
 
         public Tokenizer()
         {
-            tokenDefinitions.Add(new TokenDefinition(TokenType.Char, "^'[^']*'"));
+            tokenDefinitions.Add(new TokenDefinition(TokenType.Char, "^'[^']'"));
             tokenDefinitions.Add(new TokenDefinition(TokenType.String, "^\"[^\"]*\""));
             tokenDefinitions.Add(new TokenDefinition(TokenType.Double, "^\\d+"));
             tokenDefinitions.Add(new TokenDefinition(TokenType.Array, @"^\{[^\{\}]*\}"));
@@ -22,6 +22,7 @@ namespace potatio
             tokenDefinitions.Add(new TokenDefinition(TokenType.Condition, @"^if .+:(\n\s.+)+(\nelse .+:(\n\s.+)+)*"));
             tokenDefinitions.Add(new TokenDefinition(TokenType.Loop, @"^(while|for|foreach).+:(\n\s.+)+"));
             tokenDefinitions.Add(new TokenDefinition(TokenType.Call, @"^\w+\(.+\)"));
+            tokenDefinitions.Add(new TokenDefinition(TokenType.Comment, @"^\/\/.+"));
         }
 
         public List<Token> Tokenize(string input)
@@ -171,8 +172,9 @@ namespace potatio
 		Condition = 8,
 		Loop = 9,
 		Call = 10,
-        Null = 11,
-        Invalid = 12,
-        End_Of_Sequence = 13
+        Comment = 11,
+        Null = 12,
+        Invalid = 13,
+        End_Of_Sequence = 14
 	}
 }
